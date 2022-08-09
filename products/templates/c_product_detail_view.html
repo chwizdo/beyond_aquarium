@@ -23,8 +23,28 @@
                     <h1 class="mb-3">{{ product.name }}</h1>
                     <h4 class="mb-3">RM {{ product.price }}</h4>
                     <p class="mb-3">{{ product.description }}</p>
-                    <input type="number" class="form-control mb-3" value="0" name="quantity">
-                    <a href="" class="btn btn-primary">Add to Cart</a>
+                    <form method="post">
+                        {% csrf_token %}
+                        <input type="hidden" name="_method" value="post">
+                        <input type="number" class="form-control mb-3" value="{% if quantity is not None %}{{ quantity }}{% else %}0{% endif %}" name="quantity" max="{{ product.stock }}">
+                        <button type="submit" class="btn btn-primary mb-3">
+                            {% if quantity is not None %}
+                                Update Cart
+                            {% else %}
+                                Add to Cart
+                            {% endif %}
+                        </button>
+                    </form>
+                    {% csrf_token %}
+                    {% if quantity is not None %}
+                        <form method="post">
+                            {% csrf_token %}
+                            <input type="hidden" name="_method" value="delete">
+                            <button type="submit" class="btn btn-danger">
+                                Remove from Cart
+                            </button>
+                        </form>
+                    {% endif %}
                 </div>
             </div>
         </div>

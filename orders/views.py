@@ -7,6 +7,15 @@ from carts.models import Cart, CartItem
 
 
 class CustomerOrderView(View):
+    def get(self, request):
+        # Redirect user to login screen if user is unauthenticated.
+        if not request.user.is_authenticated:
+            return redirect('c_login')
+
+        orders = Order.objects.filter(user_id=request.user.id)
+
+        return render(request, 'c_order_view.html', {'orders': orders})
+
     def post(self, request):
         # Redirect user to login screen if user is unauthenticated.
         if not request.user.is_authenticated:

@@ -8,6 +8,8 @@ class Order(models.Model):
     email = models.CharField(max_length=256)
     phone = models.CharField(max_length=256)
     created_at = models.DateTimeField(auto_now_add=True)
+    shipping = models.CharField(max_length=256)
+    remark = models.TextField()
 
     def __str__(self):
         return self.name

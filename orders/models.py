@@ -20,3 +20,15 @@ class Address(models.Model):
 
     def __str__(self):
         return self.street
+
+
+class OrderItem(models.Model):
+    name = models.CharField(max_length=256)
+    price = models.IntegerField()
+    description = models.TextField()
+    quantity = models.IntegerField()
+    category = models.CharField(max_length=256)
+    order = models.ForeignKey(Order, on_delete=models.CASCADE)
+
+    def __str__(self):
+        return self.name

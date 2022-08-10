@@ -24,8 +24,7 @@ class CustomerLoginView(View):
     if user is not None:
       login(request=request, user=user)
 
-    return HttpResponse('success')
-    # return redirect('home')
+    return redirect('c_product')
 
 class CustomerSignUpView(View):
   def get(self, request):
@@ -51,7 +50,7 @@ class CustomerSignUpView(View):
 
     User.objects.create_user(email, password=password, first_name=name, is_staff=True)
 
-    return HttpResponse('Success')
+    return redirect('c_product')
 
 
 class UserCreateView(View):

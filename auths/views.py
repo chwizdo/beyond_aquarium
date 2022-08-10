@@ -56,3 +56,33 @@ class CustomerSignUpView(View):
 class UserCreateView(View):
   def get(self, request):
     return render(request, 'a_user_create_view.html')
+    
+
+class CustomerProfileDetailView(View):
+  def get(self, request):
+    # Redirect user to login screen if user is unauthenticated.
+    if not request.user.is_authenticated:
+      return redirect('c_login')
+
+    return render(request, 'c_profile_detail_view.html', {'user': request.user})
+
+  def post(self, request):
+    # Redirect user to login screen if user is unauthenticated.
+    if not request.user.is_authenticated:
+      return redirect('c_login')
+
+    name = request.POST.get('name')
+    email = request.POST.get('email')
+    password = request.POST.get('password')
+
+    request.user.first_name = name
+    request.user.username = email
+    request.user.save()
+
+    if password != '':
+      request.user.set_password(password)
+      request.user.save()
+      login(request, request.user)
+
+    return render(request, 'c_profile_detail_view.html', {'user': request.user})
+

@@ -50,6 +50,10 @@ class CustomerOrderView(View):
         
         for cart_item in cart_items:
             product = cart_item.product
+
+            product.stock = product.stock - cart_item.quantity
+            product.save()
+
             OrderItem.objects.create(
                 name=product.name, 
                 price=product.price, 
@@ -58,5 +62,7 @@ class CustomerOrderView(View):
                 category=product.category.name, 
                 order_id=order.id,
             )
+
+            cart_item.delete()
 
         return redirect('c_checkout')

@@ -12,7 +12,9 @@
     {% include 'c_nav_bar.html' %}
 
     <div class="container mb-4">
-        <form method="post">
+        <form action="{% url 'c_order' %}" method="post">
+            {% csrf_token %}
+
             <!-- Billing Information -->
 
             <div class="mb-1">

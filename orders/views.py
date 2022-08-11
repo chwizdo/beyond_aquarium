@@ -46,6 +46,7 @@ class CustomerOrderView(View):
         remark = request.POST.get('remark')
 
         order = Order.objects.create(
+            user_id=request.user.id,
             name=name, 
             email=email, 
             phone=phone,
@@ -79,7 +80,9 @@ class CustomerOrderView(View):
 
             cart_item.delete()
 
-        return redirect('c_checkout')
+        orders = Order.objects.filter(user_id=request.user.id)
+
+        return render(request, 'c_order_view.html', {'orders': orders})
 
     
 class CustomerOrderDetailView(View):

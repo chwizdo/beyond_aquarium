@@ -4,35 +4,22 @@ from django.http import HttpResponse
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.models import User
 from auths.models import Role
+from utils.views import Util
 
 class CustomerLoginView(View):
   def get(self, request):
-    if request.user.is_authenticated:
-      try:
-        role = Role.objects.get(user_id=request.user.id)
-      except Role.DoesNotExist:
-        return redirect('c_product')
+    authenticated_res = Util.redirect_if_authenticated(request)
 
-      print(role)
-
-      if role == 'admin':
-        return redirect('a_order')
-      else:
-        return redirect('c_product')
+    if authenticated_res is not None:
+      return authenticated_res
 
     return render(request, 'c_login_view.html')
 
   def post(self, request):
-    if request.user.is_authenticated:
-      try:
-        role = Role.objects.get(user_id=request.user.id)
-      except Role.DoesNotExist:
-        return redirect('c_product')
+    authenticated_res = Util.redirect_if_authenticated(request)
 
-      if role.role == 'admin':
-        return redirect('a_order')
-      else:
-        return redirect('c_product')
+    if authenticated_res is not None:
+      return authenticated_res
 
     email = request.POST.get('email')
     password = request.POST.get('password')
@@ -53,16 +40,18 @@ class CustomerLoginView(View):
 
 class CustomerSignUpView(View):
   def get(self, request):
-    if request.user.is_authenticated:
-      # check user's identity
-      return redirect('c_product')
+    authenticated_res = Util.redirect_if_authenticated(request)
+
+    if authenticated_res is not None:
+      return authenticated_res
 
     return render(request, 'c_signup_view.html')
 
   def post(self, request):
-    if request.user.is_authenticated:
-      # check user's identity
-      return redirect('c_product')
+    authenticated_res = Util.redirect_if_authenticated(request)
+
+    if authenticated_res is not None:
+      return authenticated_res
 
     name = request.POST.get('name')
     email = request.POST.get('email')
@@ -85,16 +74,18 @@ class UserCreateView(View):
 
 class CustomerProfileDetailView(View):
   def get(self, request):
-    # Redirect user to login screen if user is unauthenticated.
-    if not request.user.is_authenticated:
-      return redirect('c_login')
+    unauthenticated_res = Util.redirect_if_unauthenticated(request)
+
+    if unauthenticated_res is not None:
+      return unauthenticated_res
 
     return render(request, 'c_profile_detail_view.html', {'user': request.user})
 
   def post(self, request):
-    # Redirect user to login screen if user is unauthenticated.
-    if not request.user.is_authenticated:
-      return redirect('c_login')
+    unauthenticated_res = Util.redirect_if_unauthenticated(request)
+
+    if unauthenticated_res is not None:
+      return unauthenticated_res
 
     name = request.POST.get('name')
     email = request.POST.get('email')
@@ -114,9 +105,10 @@ class CustomerProfileDetailView(View):
   
 class CustomerLogoutView(View):
   def get(self, request):
-    # Redirect user to login screen if user is unauthenticated.
-    if not request.user.is_authenticated:
-      return redirect('c_login')
+    unauthenticated_res = Util.redirect_if_unauthenticated(request)
+
+    if unauthenticated_res is not None:
+      return unauthenticated_res
 
     logout(request)
 

@@ -162,7 +162,34 @@ class AdminUserDetailView(View):
         role_name = None
 
     return render(request, 'a_user_detail_view.html', {'selected_user': user, 'role': role_name})
+
+
+class AdminUserCreationView(View):
+  def get(self, request):
+    unauthenticated_res = Util.redirect_if_unauthenticated(request)
+
+    if unauthenticated_res is not None:
+      return unauthenticated_res
+
+    return render(request, 'a_user_create_view.html')
+  def post(self, request):
+    unauthenticated_res = Util.redirect_if_unauthenticated(request)
+
+    if unauthenticated_res is not None:
+      return unauthenticated_res
+      
+    name = request.POST.get('name')
+    email = request.POST.get('email')
+    password = request.POST.get('password')
+    role = request.POST.get('role')
+
+    user = User.objects.create_user(email, password=password, first_name=name)
+
+    if role != 'customer':
+      Role.objects.create(user_id=user.id, role=role)
     
+    return redirect('a_user')
+
 
 class CustomerProfileDetailView(View):
   def get(self, request):

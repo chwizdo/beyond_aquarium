@@ -67,9 +67,70 @@ class CustomerSignUpView(View):
     return redirect('c_product')
 
 
-class UserCreateView(View):
+class AdminUserView(View):
   def get(self, request):
-    return render(request, 'a_user_create_view.html')
+    unauthenticated_res = Util.redirect_if_unauthenticated(request)
+
+    if unauthenticated_res is not None:
+      return unauthenticated_res
+
+    users = User.objects.all()
+
+    return render(request, 'a_user_view.html', {'users': users})
+
+
+class AdminUserDetailView(View):
+  def get(self, request, user_id):
+    unauthenticated_res = Util.redirect_if_unauthenticated(request)
+
+    if unauthenticated_res is not None:
+      return unauthenticated_res
+
+    # If user id is not present in the path parameter,
+    # redirect user back to user listing page.
+    if user_id is None:
+        return redirect('a_user')
+
+    # Query user object from user id in path parameter,
+    # if user object is not found, redirect user back to user listing page.
+    try:
+        user = User.objects.get(id=user_id)
+    except User.DoesNotExist:
+        return redirect('a_user')
+
+    return render(request, 'a_user_detail_view.html', {'selected_user': user})
+
+  def post(self, request, user_id):
+    unauthenticated_res = Util.redirect_if_unauthenticated(request)
+
+    if unauthenticated_res is not None:
+      return unauthenticated_res
+
+    # If user id is not present in the path parameter,
+    # redirect user back to user listing page.
+    if user_id is None:
+        return redirect('a_user')
+
+    # Query user object from user id in path parameter,
+    # if user object is not found, redirect user back to user listing page.
+    try:
+        user = User.objects.get(id=user_id)
+    except User.DoesNotExist:
+        return redirect('a_user')
+
+    name = request.POST.get('name')
+    email = request.POST.get('email')
+    password = request.POST.get('password')
+
+    user.first_name = name
+    user.username = email
+    user.save()
+
+    if password != '':
+      user.set_password(password)
+      user.save()
+
+    return render(request, 'a_user_detail_view.html', {'selected_user': user})
     
 
 class CustomerProfileDetailView(View):

@@ -3,19 +3,36 @@ from django.shortcuts import render, redirect
 from django.http import HttpResponse
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.models import User
+from auths.models import Role
 
 class CustomerLoginView(View):
   def get(self, request):
     if request.user.is_authenticated:
-      # check user's identity
-      return redirect('c_product')
+      try:
+        role = Role.objects.get(user_id=request.user.id)
+      except Role.DoesNotExist:
+        return redirect('c_product')
+
+      print(role)
+
+      if role == 'admin':
+        return redirect('a_order')
+      else:
+        return redirect('c_product')
 
     return render(request, 'c_login_view.html')
 
   def post(self, request):
     if request.user.is_authenticated:
-      # check user's identity
-      return redirect('c_product')
+      try:
+        role = Role.objects.get(user_id=request.user.id)
+      except Role.DoesNotExist:
+        return redirect('c_product')
+
+      if role.role == 'admin':
+        return redirect('a_order')
+      else:
+        return redirect('c_product')
 
     email = request.POST.get('email')
     password = request.POST.get('password')
@@ -24,7 +41,15 @@ class CustomerLoginView(View):
     if user is not None:
       login(request=request, user=user)
 
-    return redirect('c_product')
+    try:
+        role = Role.objects.get(user_id=request.user.id)
+    except Role.DoesNotExist:
+      return redirect('c_product')
+
+    if role.role == 'admin':
+      return redirect('a_order')
+    else:
+      return redirect('c_product')
 
 class CustomerSignUpView(View):
   def get(self, request):

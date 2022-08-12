@@ -113,3 +113,14 @@ class CustomerOrderDetailView(View):
         address = Address.objects.get(order_id=order.id)
 
         return render(request, 'c_order_detail_view.html', {'order': order, 'order_items': order_items, 'total_amount': total_amount, 'address': address})
+
+
+class AdminOrderView(View):
+    def get(self, request):
+        # Redirect user to login screen if user is unauthenticated.
+        if not request.user.is_authenticated:
+            return redirect('c_login')
+
+        orders = Order.objects.all()
+
+        return render(request, 'a_order_view.html', {'orders': orders})

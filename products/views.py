@@ -1,8 +1,10 @@
+from unicodedata import name
 from django.views import View
 from django.shortcuts import render, redirect
 from carts.models import Cart, CartItem
 
 from products.models import Product, ProductCategory
+from utils.views import Util
 
 class CustomerProductView(View):
   def get(self, request, category_id = None):
@@ -120,3 +122,70 @@ class CustomerProductDetailView(View):
         else:
             # Refresh the page if invalid form submission method.
             return render(request, 'c_product_detail_view.html', {'product': product, 'quantity': cart_item_quantity})
+
+
+class AdminProductView(View):
+    def get(self, request):
+        unauthenticated_res = Util.redirect_if_unauthenticated(request)
+
+        if unauthenticated_res is not None:
+            return unauthenticated_res
+
+        products = Product.objects.all()
+
+        return render(request, 'a_product_view.html', {'products': products})
+
+
+class AdminProductDetailView(View):
+    def get(self, request, product_id):
+        unauthenticated_res = Util.redirect_if_unauthenticated(request)
+
+        if unauthenticated_res is not None:
+            return unauthenticated_res
+
+        # If user id is not present in the path parameter,
+        # redirect user back to user listing page.
+        if product_id is None:
+            return redirect('a_product')
+
+        # Query user object from user id in path parameter,
+        # if user object is not found, redirect user back to user listing page.
+        try:
+            product = Product.objects.get(id=product_id)
+        except Product.DoesNotExist:
+            return redirect('a_product')
+
+        return render(request, 'a_product_detail_view.html', {'product': product})
+    def post(self, request, product_id):
+        unauthenticated_res = Util.redirect_if_unauthenticated(request)
+
+        if unauthenticated_res is not None:
+            return unauthenticated_res
+
+        # If user id is not present in the path parameter,
+        # redirect user back to user listing page.
+        if product_id is None:
+            return redirect('a_product')
+
+        # Query user object from user id in path parameter,
+        # if user object is not found, redirect user back to user listing page.
+        try:
+            product = Product.objects.get(id=product_id)
+        except Product.DoesNotExist:
+            return redirect('a_product')
+
+        method = request.POST.get('_method')
+
+        if method == 'PUT':
+            name = request.POST.get('name')
+            description = request.POST.get('description')
+            price = request.POST.get('price')
+            stock = request.POST.get('stock')
+
+            product.name = name
+            product.description = description
+            product.price = price
+            product.stock = stock
+            product.save()
+        
+        return render(request, 'a_product_detail_view.html', {'product': product})

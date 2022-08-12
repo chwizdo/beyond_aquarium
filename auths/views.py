@@ -1,7 +1,7 @@
 from django.views import View
 from django.shortcuts import render, redirect
 from django.http import HttpResponse
-from django.contrib.auth import authenticate, login
+from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.models import User
 
 class CustomerLoginView(View):
@@ -86,3 +86,13 @@ class CustomerProfileDetailView(View):
 
     return render(request, 'c_profile_detail_view.html', {'user': request.user})
 
+  
+class CustomerLogoutView(View):
+  def get(self, request):
+    # Redirect user to login screen if user is unauthenticated.
+    if not request.user.is_authenticated:
+      return redirect('c_login')
+
+    logout(request)
+
+    return redirect('c_login')

@@ -14,6 +14,7 @@
     <div class="container">
         <form method="post">
             {% csrf_token %}
+            <input type="hidden" name="_method" value="PUT">
             <div class="mb-1">
                 <label for="name" class="form-label">
                     Full Name
@@ -31,6 +32,24 @@
                     Reset Password (Optional)
                 </label>
                 <input type="password" class="form-control" name="password" id="password">
+            </div>
+            <div class="form-check mb-1">
+                <input class="form-check-input" type="radio" name="role" id="role-customer" {% if role is None %} checked {% endif %} value="customer">
+                <label class="form-check-label" for="role-customer">
+                    Customer
+                </label>
+            </div>
+            <div class="form-check mb-1">
+                <input class="form-check-input" type="radio" name="role" id="role-staff" {% if role == 'staff' %} checked {% endif %} value="staff">
+                <label class="form-check-label" for="role-staff">
+                    Staff
+                </label>
+            </div>
+            <div class="form-check mb-5">
+                <input class="form-check-input" type="radio" name="role" id="role-admin" {% if role == 'admin' %} checked {% endif %} value="admin">
+                <label class="form-check-label" for="role-admin">
+                    Admin
+                </label>
             </div>
             <button type="submit" class="btn btn-primary w-100 mb-3">
                 Update

@@ -98,7 +98,13 @@ class AdminUserDetailView(View):
     except User.DoesNotExist:
         return redirect('a_user')
 
-    return render(request, 'a_user_detail_view.html', {'selected_user': user})
+    try:
+      role = Role.objects.get(user_id=user.id)
+      role_name = role.role
+    except:
+      role_name = None
+
+    return render(request, 'a_user_detail_view.html', {'selected_user': user, 'role': role_name})
 
   def post(self, request, user_id):
     unauthenticated_res = Util.redirect_if_unauthenticated(request)
@@ -118,19 +124,44 @@ class AdminUserDetailView(View):
     except User.DoesNotExist:
         return redirect('a_user')
 
-    name = request.POST.get('name')
-    email = request.POST.get('email')
-    password = request.POST.get('password')
+    try:
+      role = Role.objects.get(user_id=user.id)
+    except:
+      role = None
 
-    user.first_name = name
-    user.username = email
-    user.save()
+    method = request.POST.get('_method')
 
-    if password != '':
-      user.set_password(password)
+    if method == 'PUT':
+      name = request.POST.get('name')
+      email = request.POST.get('email')
+      password = request.POST.get('password')
+      input_role = request.POST.get('role')
+
+      if input_role == 'customer':
+        input_role = None
+
+      user.first_name = name
+      user.username = email
       user.save()
 
-    return render(request, 'a_user_detail_view.html', {'selected_user': user})
+      if password != '':
+        user.set_password(password)
+        user.save()
+
+      if role is None and input_role is not None:
+        Role.objects.create(user_id=user.id, role=input_role)
+        role_name = input_role
+      elif role is not None and input_role is not None:
+        role.role = input_role
+        role.save()
+        role_name = input_role
+      elif role is not None and input_role is None:
+        role.delete()
+        role_name = None
+      else:
+        role_name = None
+
+    return render(request, 'a_user_detail_view.html', {'selected_user': user, 'role': role_name})
     
 
 class CustomerProfileDetailView(View):

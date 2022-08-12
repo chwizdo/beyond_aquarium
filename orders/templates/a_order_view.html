@@ -16,6 +16,7 @@
             <thead>
                 <tr>
                     <th scope="col" class="align-middle">#</th>
+                    <th scope="col" class="align-middle">User</th>
                     <th scope="col" class="align-middle">Datetime</th>
                     <th scope="col" class="align-middle"></th>
                 </tr>
@@ -24,9 +25,10 @@
                 {% for order in orders %}
                 <tr>
                     <th scope="row" class="align-middle">{{ forloop.counter }}</th>
+                    <td class="align-middle">{{ order.user.first_name }}</td>
                     <td class="align-middle">{{ order.created_at }}</td>
                     <td class="text-end">
-                        <a href="{% url 'c_order_detail' order.id %}" class="btn btn-primary">View</a>
+                        <a href="{% url 'a_order_detail' order.id %}" class="btn btn-primary">Edit</a>
                     </td>
                 </tr>
                 {% endfor %}

@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- CSS only -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-gH2yIJqKdNHPEq0n4Mqa/HGKIhSkIHeL5AyhkYV8i59U5AR6csBvApHHNl/vI1Bx" crossorigin="anonymous">
+    <title>Document</title>
+</head>
+<body>
+    {% include 'a_nav_bar.html' %}
+
+    <div class="container mb-4">
+        <div class="row">
+            <div class="col-6">
+                <div class="row row-cols-3">
+                    {% for order_item in order_items %}
+                        <div class="col">
+                            <div class="ratio ratio-1x1 mb-2">
+                                <img style="object-fit: cover;" class="rounded" src="https://images.unsplash.com/photo-1659948782675-9d4fadea983b?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=2070&q=80">
+                            </div>
+                            <div class="mb-1">
+                                {{ order_item.name }}
+                            </div>
+                            <div class="mb-1">
+                                RM {{ order_item.price }}
+                            </div>
+                            <div>
+                                Quantity: {{ order_item.quantity }}
+                            </div>
+                        </div>
+                    {% endfor %}
+                </div>
+            </div>
+            <div class="col-6">
+                <div class="bg-light p-3 rounded">
+                    <form method="post">
+                        {% csrf_token %}
+                        <input type="hidden" name="_method" value="PUT">
+
+                        <!-- Billing Information -->
+
+                        <div class="mb-1">
+                            <label for="total" class="form-label">
+                                Total
+                            </label>
+                            <input type="text" class="form-control" name="total" id="total" value="RM {{ total_amount }}" disabled>
+                        </div>
+                        <div class="mb-1">
+                            <label for="name" class="form-label">
+                                Billing Name
+                            </label>
+                            <input type="text" class="form-control" name="name" id="name" value="{{ order.name }}" required>
+                        </div>
+                        <div class="mb-1">
+                            <label for="email" class="form-label">
+                                Billing Email
+                            </label>
+                            <input type="text" class="form-control" name="email" id="email" value="{{ order.email }}" required>
+                        </div>
+                        <div class="mb-5">
+                            <label for="phone" class="form-label">
+                                Billing Phone Number
+                            </label>
+                            <input type="text" class="form-control" name="phone" id="phone" value="{{ order.phone }}" required>
+                        </div>
+
+                        <!-- Shipping -->
+
+                        <div class="mb-1">
+                            <label for="street" class="form-label">
+                                Street
+                            </label>
+                            <input type="text" class="form-control" name="street" id="street" value="{{ address.street }}" required>
+                        </div>
+                        <div class="mb-1">
+                            <label for="city" class="form-label">
+                                City
+                            </label>
+                            <input type="text" class="form-control" name="city" id="city" value="{{ address.city }}" required>
+                        </div>
+                        <div class="mb-1">
+                            <label for="postcode" class="form-label">
+                                Postcode
+                            </label>
+                            <input type="text" class="form-control" name="postcode" id="postcode" value="{{ address.postcode }}" required>
+                        </div>
+                        <div class="mb-1">
+                            <label for="state" class="form-label">
+                                State
+                            </label>
+                            <input type="text" class="form-control" name="state" id="state" value="{{ address.state }}" required>
+                        </div>
+                        <div class="mb-5">
+                            <label for="country" class="form-label">
+                                Country
+                            </label>
+                            <input type="text" class="form-control" name="country" id="country" value="{{ address.country }}" required>
+                        </div>
+
+                        <!-- Textarea -->
+
+                        <div class="mb-1">
+                            <label for="shipping" class="form-label">
+                                Shipping Method
+                            </label>
+                            <select class="form-select" id="shipping" name="shipping" required>
+                                <option value="cash" {% if order.shipping == 'cash' %} selected {% endif %}>Cash</option>
+                                <option value="pickup" {% if order.shipping == 'pickup' %} selected {% endif %}>Self Pickup</option>
+                            </select>
+                        </div>
+                        <div class="mb-5">
+                            <label for="remark" class="form-label">
+                                Remark
+                            </label>
+                            <textarea name="remark" id="remark" cols="30" class="form-control" rows="10">{{ order.remark }}</textarea>
+                        </div>
+
+                        <!-- Submit Button -->
+            
+                        <button type="submit" class="btn btn-primary w-100">
+                            Update
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- JavaScript Bundle with Popper -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-A3rJD856KowSb7dwlZdYEkO39Gagi7vIsF0jrRAoQmDKKtQBHUuLZ9AsSv4jD4Xa" crossorigin="anonymous"></script>
+</body>
+</html>

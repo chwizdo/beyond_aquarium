@@ -17,6 +17,8 @@
                 <div class="bg-light p-3 rounded">
                     <form method="post">
                         {% csrf_token %}
+                        <input type="hidden" name="_method" value="appointment">
+
                         <div class="mb-1">
                             <label for="date" class="form-label">
                                 Date

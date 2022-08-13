@@ -1,5 +1,5 @@
 from django.shortcuts import render
-from .models import Appointment
+from .models import Appointment, Feedback
 from utils.views import Util
 from django.views import View
 import datetime
@@ -30,5 +30,9 @@ class CustomerContactUsView(View):
             date = datetime.date(int(date_splitted[0]), int(date_splitted[1]), int(date_splitted[2]))
 
             Appointment.objects.create(user_id=request.user.id, date=date, reason=reason)
+        elif method == 'feedback':
+            feedback = request.POST.get('feedback')
+
+            Feedback.objects.create(user_id=request.user.id, content=feedback)
 
         return render(request, 'c_contact_us_view.html')

@@ -46,6 +46,8 @@
                 <div class="bg-light p-3 rounded">
                     <form method="post">
                         {% csrf_token %}
+                        <input type="hidden" name="_method" value="feedback">
+
                         <div class="mb-5">
                             <label for="feedback" class="form-label">
                                 Feedback

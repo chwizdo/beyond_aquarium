@@ -12,7 +12,7 @@ class Appointment(models.Model):
 
 class Feedback(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
-    content = models.TextField
+    content = models.TextField()
 
     def __str__(self):
         return self.content

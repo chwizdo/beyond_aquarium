@@ -129,7 +129,7 @@ class CustomerProductDetailView(View):
             return render(request, 'c_product_detail_view.html', {'product': product, 'quantity': cart_item_quantity})
 
 
-class AdminProductView(View):
+class APIProductView(View):
     def get(self, request):
         unauthenticated_res = Util.redirect_if_unauthenticated(request)
 
@@ -143,7 +143,7 @@ class AdminProductView(View):
         return render(request, 'a_product_view.html', {'products': products, 'role': role.role})
 
 
-class AdminProductDetailView(View):
+class APIProductDetailView(View):
     def get(self, request, product_id):
         unauthenticated_res = Util.redirect_if_unauthenticated(request)
 
@@ -204,7 +204,7 @@ class AdminProductDetailView(View):
         return render(request, 'a_product_detail_view.html', {'product': product, 'role': role.role})
 
 
-class AdminProductCreateView(View):
+class APIProductCreateView(View):
     def get(self, request):
         unauthenticated_res = Util.redirect_if_unauthenticated(request)
 

@@ -13,7 +13,7 @@
 
     <div class="container mb-4">
         <div class="row">
-            <div class="col-8">
+            <div class="col-6">
                 <div class="row row-cols-3">
                     {% for order_item in order_items %}
                         <div class="col">
@@ -33,59 +33,90 @@
                     {% endfor %}
                 </div>
             </div>
-            <div class="col-4">
+            <div class="col-6">
                 <div class="bg-light p-3 rounded">
-                    <div class="mb-1">
-                        Total:
-                    </div>
-                    <div class="mb-4 h5">
-                        RM {{ total_amount }}
-                    </div>
-                    <div class="mb-1">
-                        Name:
-                    </div>
-                    <div class="mb-4 h5">
-                        {{ order.name }}
-                    </div>
-                    <div class="mb-1">
-                        Email:
-                    </div>
-                    <div class="mb-4 h5">
-                        {{ order.email }}
-                    </div>
-                    <div class="mb-1">
-                        Phone Number:
-                    </div>
-                    <div class="mb-4 h5">
-                        {{ order.phone }}
-                    </div>
-                    <div class="mb-1">
-                        Phone Number:
-                    </div>
-                    <div class="mb-4 h5">
-                        {{ order.phone }}
-                    </div>
-                    <div class="mb-1">
-                        Shipping Method:
-                    </div>
-                    <div class="mb-4 h5">
-                        {{ order.shipping }}
-                    </div>
-                    <div class="mb-4">
-                        <hr>
-                    </div>
-                    <div class="mb-1">
-                        Address:
-                    </div>
-                    <div class="mb-4">
-                        {{ address.street }} {{ address.city }} {{ address.postcode }} {{ address.state }} {{ address.country }}
-                    </div>
-                    <div class="mb-1">
-                        Remark:
-                    </div>
-                    <div>
-                        {{ order.remark }}
-                    </div>
+                    <form method="post">
+                        {% csrf_token %}
+                        <input type="hidden" name="_method" value="PUT">
+
+                        <!-- Billing Information -->
+
+                        <div class="mb-1">
+                            <label for="total" class="form-label">
+                                Total
+                            </label>
+                            <input type="text" class="form-control" name="total" id="total" value="RM {{ total_amount }}" disabled>
+                        </div>
+                        <div class="mb-1">
+                            <label for="name" class="form-label">
+                                Billing Name
+                            </label>
+                            <input type="text" class="form-control" name="name" id="name" value="{{ order.name }}" disabled>
+                        </div>
+                        <div class="mb-1">
+                            <label for="email" class="form-label">
+                                Billing Email
+                            </label>
+                            <input type="text" class="form-control" name="email" id="email" value="{{ order.email }}" disabled>
+                        </div>
+                        <div class="mb-5">
+                            <label for="phone" class="form-label">
+                                Billing Phone Number
+                            </label>
+                            <input type="text" class="form-control" name="phone" id="phone" value="{{ order.phone }}" disabled>
+                        </div>
+
+                        <!-- Shipping -->
+
+                        <div class="mb-1">
+                            <label for="street" class="form-label">
+                                Street
+                            </label>
+                            <input type="text" class="form-control" name="street" id="street" value="{{ address.street }}" disabled>
+                        </div>
+                        <div class="mb-1">
+                            <label for="city" class="form-label">
+                                City
+                            </label>
+                            <input type="text" class="form-control" name="city" id="city" value="{{ address.city }}" disabled>
+                        </div>
+                        <div class="mb-1">
+                            <label for="postcode" class="form-label">
+                                Postcode
+                            </label>
+                            <input type="text" class="form-control" name="postcode" id="postcode" value="{{ address.postcode }}" disabled>
+                        </div>
+                        <div class="mb-1">
+                            <label for="state" class="form-label">
+                                State
+                            </label>
+                            <input type="text" class="form-control" name="state" id="state" value="{{ address.state }}" disabled>
+                        </div>
+                        <div class="mb-5">
+                            <label for="country" class="form-label">
+                                Country
+                            </label>
+                            <input type="text" class="form-control" name="country" id="country" value="{{ address.country }}" disabled>
+                        </div>
+
+                        <!-- Textarea -->
+
+                        <div class="mb-1">
+                            <label for="shipping" class="form-label">
+                                Shipping Method
+                            </label>
+                            <select class="form-select" id="shipping" name="shipping" disabled>
+                                <option value="cash" {% if order.shipping == 'cash' %} selected {% endif %}>Cash</option>
+                                <option value="pickup" {% if order.shipping == 'pickup' %} selected {% endif %}>Self Pickup</option>
+                            </select>
+                        </div>
+                        <div class="mb-1">
+                            <label for="remark" class="form-label">
+                                Remark
+                            </label>
+                            <textarea name="remark" id="remark" cols="30" class="form-control" rows="10" disabled>{{ order.remark }}</textarea>
+                        </div>
+                    </form>
                 </div>
             </div>
         </div>

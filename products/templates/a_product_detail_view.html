@@ -33,11 +33,21 @@
                 </label>
                 <input type="number" class="form-control" name="price" id="price" value="{{ product.price }}">
             </div>
-            <div class="mb-5">
+            <div class="mb-1">
                 <label for="stock" class="form-label">
                     Stock
                 </label>
                 <input type="number" class="form-control" name="stock" id="stock" value="{{ product.stock }}">
+            </div>
+            <div class="mb-5">
+                <label for="category" class="form-label">
+                    Category
+                </label>
+                <select class="form-select" id="category" name="category" required>
+                    {% for product_category in product_categories %}
+                        <option value="{{ product_category.id }}" {% if product.category_id == product_category.id %} selected {% endif %}>{{ product_category.name }}</option>
+                    {% endfor %}
+                </select>
             </div>
             <button type="submit" class="btn btn-primary w-100 mb-3">
                 Update

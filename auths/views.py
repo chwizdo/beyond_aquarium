@@ -116,6 +116,7 @@ class AdminUserDetailView(View):
     # redirect user back to user listing page.
     if user_id is None:
         return redirect('a_user')
+        
 
     # Query user object from user id in path parameter,
     # if user object is not found, redirect user back to user listing page.

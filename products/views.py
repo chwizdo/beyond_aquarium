@@ -7,28 +7,31 @@ from products.models import Product, ProductCategory
 from utils.views import Util
 
 class CustomerProductView(View):
-  def get(self, request, category_id = None):
-    if not request.user.is_authenticated:
-      return redirect('c_login')
+    def get(self, request, category_id = None):
+        unauthenticated_res = Util.redirect_if_unauthenticated(request)
 
-    product_categories = ProductCategory.objects.all()
+        if unauthenticated_res is not None:
+            return unauthenticated_res
 
-    try:
-        if category_id is not None:
-            ProductCategory.objects.get(id=category_id)
-            products = Product.objects.filter(category=category_id)
-        else:
+        product_categories = ProductCategory.objects.all()
+
+        try:
+            if category_id is not None:
+                ProductCategory.objects.get(id=category_id)
+                products = Product.objects.filter(category=category_id)
+            else:
+                products = Product.objects.all()
+        except ValueError and ProductCategory.DoesNotExist:
             products = Product.objects.all()
-    except ValueError and ProductCategory.DoesNotExist:
-        products = Product.objects.all()
-    
-    return render(request, 'c_product_view.html', {'products': products, 'product_categories': product_categories})
+        
+        return render(request, 'c_product_view.html', {'products': products, 'product_categories': product_categories})
 
 class CustomerProductDetailView(View):
     def get(self, request, product_id = None):
-        # Redirect user to login screen if user is unauthenticated.
-        if not request.user.is_authenticated:
-            return redirect('c_login')
+        unauthenticated_res = Util.redirect_if_unauthenticated(request)
+
+        if unauthenticated_res is not None:
+            return unauthenticated_res
 
         # If product id is not present in the path parameter,
         # redirect user back to product listing page.
@@ -59,9 +62,10 @@ class CustomerProductDetailView(View):
         return render(request, 'c_product_detail_view.html', {'product': product, 'quantity': quantity})
 
     def post(self, request, product_id = None):
-        # Redirect user to login screen if user is unauthenticated.
-        if not request.user.is_authenticated:
-            return redirect('c_login')
+        unauthenticated_res = Util.redirect_if_unauthenticated(request)
+
+        if unauthenticated_res is not None:
+            return unauthenticated_res
         
         # If product id is not present in the path parameter,
         # redirect user back to product listing page.
@@ -155,7 +159,9 @@ class AdminProductDetailView(View):
         except Product.DoesNotExist:
             return redirect('a_product')
 
-        return render(request, 'a_product_detail_view.html', {'product': product})
+        product_categories = ProductCategory.objects.all()
+
+        return render(request, 'a_product_detail_view.html', {'product': product, 'product_categories': product_categories})
     def post(self, request, product_id):
         unauthenticated_res = Util.redirect_if_unauthenticated(request)
 
@@ -189,3 +195,31 @@ class AdminProductDetailView(View):
             product.save()
         
         return render(request, 'a_product_detail_view.html', {'product': product})
+
+
+class AdminProductCreateView(View):
+    def get(self, request):
+        unauthenticated_res = Util.redirect_if_unauthenticated(request)
+
+        if unauthenticated_res is not None:
+            return unauthenticated_res
+
+        product_categories = ProductCategory.objects.all()
+
+        return render(request, 'a_product_detail_view.html', {'product_categories': product_categories})
+
+    def post(self, request):
+        unauthenticated_res = Util.redirect_if_unauthenticated(request)
+
+        if unauthenticated_res is not None:
+            return unauthenticated_res
+
+        name = request.POST.get('name')
+        description = request.POST.get('description')
+        price = request.POST.get('price')
+        stock = request.POST.get('stock')
+        category = request.POST.get('category')
+
+        Product.objects.create(name=name, description=description, price=price, stock=stock, category_id=category)
+
+        return redirect('a_product')

@@ -117,7 +117,7 @@ class CustomerOrderDetailView(View):
         return render(request, 'c_order_detail_view.html', {'order': order, 'order_items': order_items, 'total_amount': total_amount, 'address': address})
 
 
-class AdminOrderView(View):
+class APIOrderView(View):
     def get(self, request):
         unauthenticated_res = Util.redirect_if_unauthenticated(request)
 
@@ -131,7 +131,7 @@ class AdminOrderView(View):
         return render(request, 'a_order_view.html', {'orders': orders, 'role': role.role})
 
 
-class AdminOrderDetailView(View):
+class APIOrderDetailView(View):
     def get(self, request, order_id):
         unauthenticated_res = Util.redirect_if_unauthenticated(request)
 
@@ -224,7 +224,9 @@ class AdminOrderDetailView(View):
             address.country = country
             address.save()
 
-        return render(request, 'a_order_detail_view.html', {'order': order, 'order_items': order_items, 'total_amount': total_amount, 'address': address})
+        role = Role.objects.get(user_id=request.user.id)
+
+        return render(request, 'a_order_detail_view.html', {'order': order, 'order_items': order_items, 'total_amount': total_amount, 'address': address, 'role': role.role})
 
             
 

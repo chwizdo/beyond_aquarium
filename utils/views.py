@@ -4,6 +4,7 @@ from django.shortcuts import redirect
 
 class Util:
     ADMIN_HOMEPAGE = 'a_order'
+    STAFF_HOMEPAGE = 'a_order'
     CUSTOMER_HOMEPAGE = 'c_product'
     LOGIN_PAGE = 'c_login'
 
@@ -17,6 +18,8 @@ class Util:
 
             if role.role == 'admin':
                 return redirect(Util.ADMIN_HOMEPAGE)
+            elif role.role == 'staff':
+                return redirect(Util.STAFF_HOMEPAGE)
             else:
                 return redirect(Util.CUSTOMER_HOMEPAGE)
 

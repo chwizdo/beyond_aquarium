@@ -1,5 +1,6 @@
 from django.views import View
 from django.shortcuts import render, redirect
+from auths.models import Role
 
 from orders.models import Address, Order, OrderItem
 
@@ -118,13 +119,16 @@ class CustomerOrderDetailView(View):
 
 class AdminOrderView(View):
     def get(self, request):
-        # Redirect user to login screen if user is unauthenticated.
-        if not request.user.is_authenticated:
-            return redirect('c_login')
+        unauthenticated_res = Util.redirect_if_unauthenticated(request)
+
+        if unauthenticated_res is not None:
+            return unauthenticated_res
 
         orders = Order.objects.all()
 
-        return render(request, 'a_order_view.html', {'orders': orders})
+        role = Role.objects.get(user_id=request.user.id)
+
+        return render(request, 'a_order_view.html', {'orders': orders, 'role': role.role})
 
 
 class AdminOrderDetailView(View):
@@ -155,7 +159,9 @@ class AdminOrderDetailView(View):
         
         address = Address.objects.get(order_id=order.id)
 
-        return render(request, 'a_order_detail_view.html', {'order': order, 'order_items': order_items, 'total_amount': total_amount, 'address': address})
+        role = Role.objects.get(user_id=request.user.id)
+
+        return render(request, 'a_order_detail_view.html', {'order': order, 'order_items': order_items, 'total_amount': total_amount, 'address': address, 'role': role.role})
 
     def post(self, request, order_id):
         unauthenticated_res = Util.redirect_if_unauthenticated(request)

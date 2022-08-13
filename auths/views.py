@@ -28,15 +28,9 @@ class CustomerLoginView(View):
     if user is not None:
       login(request=request, user=user)
 
-    try:
-        role = Role.objects.get(user_id=request.user.id)
-    except Role.DoesNotExist:
-      return redirect('c_product')
+    authenticated_res = Util.redirect_if_authenticated(request)
 
-    if role.role == 'admin':
-      return redirect('a_order')
-    else:
-      return redirect('c_product')
+    return authenticated_res
 
 class CustomerSignUpView(View):
   def get(self, request):
@@ -116,7 +110,7 @@ class AdminUserDetailView(View):
     # redirect user back to user listing page.
     if user_id is None:
         return redirect('a_user')
-        
+
 
     # Query user object from user id in path parameter,
     # if user object is not found, redirect user back to user listing page.

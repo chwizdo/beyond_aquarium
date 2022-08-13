@@ -9,7 +9,11 @@
     <title>Document</title>
 </head>
 <body>
-    {% include 'a_nav_bar.html' %}
+    {% if role == 'admin' %}
+        {% include 'a_nav_bar.html' %}
+    {% else %}
+        {% include 's_nav_bar.html' %}
+    {% endif %}
 
     <div class="container">
         <table class="table">

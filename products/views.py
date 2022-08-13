@@ -1,6 +1,7 @@
 from unicodedata import name
 from django.views import View
 from django.shortcuts import render, redirect
+from auths.models import Role
 from carts.models import Cart, CartItem
 
 from products.models import Product, ProductCategory
@@ -137,7 +138,9 @@ class AdminProductView(View):
 
         products = Product.objects.all()
 
-        return render(request, 'a_product_view.html', {'products': products})
+        role = Role.objects.get(user_id=request.user.id)
+
+        return render(request, 'a_product_view.html', {'products': products, 'role': role.role})
 
 
 class AdminProductDetailView(View):
@@ -161,7 +164,9 @@ class AdminProductDetailView(View):
 
         product_categories = ProductCategory.objects.all()
 
-        return render(request, 'a_product_detail_view.html', {'product': product, 'product_categories': product_categories})
+        role = Role.objects.get(user_id=request.user.id)
+
+        return render(request, 'a_product_detail_view.html', {'product': product, 'product_categories': product_categories, 'role': role.role})
     def post(self, request, product_id):
         unauthenticated_res = Util.redirect_if_unauthenticated(request)
 
@@ -193,8 +198,10 @@ class AdminProductDetailView(View):
             product.price = price
             product.stock = stock
             product.save()
+
+        role = Role.objects.get(user_id=request.user.id)
         
-        return render(request, 'a_product_detail_view.html', {'product': product})
+        return render(request, 'a_product_detail_view.html', {'product': product, 'role': role.role})
 
 
 class AdminProductCreateView(View):
@@ -206,7 +213,9 @@ class AdminProductCreateView(View):
 
         product_categories = ProductCategory.objects.all()
 
-        return render(request, 'a_product_detail_view.html', {'product_categories': product_categories})
+        role = Role.objects.get(user_id=request.user.id)
+
+        return render(request, 'a_product_detail_view.html', {'product_categories': product_categories, 'role': role.role})
 
     def post(self, request):
         unauthenticated_res = Util.redirect_if_unauthenticated(request)

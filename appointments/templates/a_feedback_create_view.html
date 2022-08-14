@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- CSS only -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-gH2yIJqKdNHPEq0n4Mqa/HGKIhSkIHeL5AyhkYV8i59U5AR6csBvApHHNl/vI1Bx" crossorigin="anonymous">
+    <title>Sign Up</title>
+</head>
+<body>
+    {% if role == 'admin' %}
+        {% include 'a_nav_bar.html' %}
+    {% else %}
+        {% include 's_nav_bar.html' %}
+    {% endif %}
+    
+    <div class="container">
+        <form method="post">
+            {% csrf_token %}
+            <div class="mb-5">
+                <label for="feedback" class="form-label">
+                    Feedback
+                </label>
+                <textarea name="feedback" id="feedback" cols="30" class="form-control" rows="10" placeholder="Any valudable feedback is deeply appreciated..."></textarea>
+            </div>
+            <button type="submit" class="btn btn-primary w-100">
+                Update Feedback
+            </button>
+        </form>
+    </div>
+    <!-- JavaScript Bundle with Popper -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-A3rJD856KowSb7dwlZdYEkO39Gagi7vIsF0jrRAoQmDKKtQBHUuLZ9AsSv4jD4Xa" crossorigin="anonymous"></script>
+</body>
+</html>

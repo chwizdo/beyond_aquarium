@@ -95,18 +95,43 @@ class AdminAppointmentDetailView(View):
             return redirect('a_appointment')
 
         method = request.POST.get('_method')
+        date = request.POST.get('date')
+        reason = request.POST.get('reason')
 
         if method == 'PUT':
-            date = request.POST.get('date')
-            reason = request.POST.get('reason')
-
             appointment.date = date
             appointment.reason = reason
             appointment.save()
+        elif method == 'DELETE':
+            pass
 
         role = Role.objects.get(user_id=request.user.id)
 
         return render(request, 'a_appointment_detail_view.html', {'role': role.role, 'appointment': appointment})
+
+
+class AdminAppointmentCreateView(View):
+    def get(self, request):
+        unauthenticated_res = Util.redirect_if_unauthenticated(request)
+
+        if unauthenticated_res is not None:
+            return unauthenticated_res
+
+        role = Role.objects.get(user_id=request.user.id)
+
+        return render(request, 'a_appointment_create_view.html', {'role': role.role})
+
+    def post(self, request):
+        unauthenticated_res = Util.redirect_if_unauthenticated(request)
+
+        if unauthenticated_res is not None:
+            return unauthenticated_res
+
+        date = request.POST.get('date')
+        reason = request.POST.get('reason')
+        Appointment.objects.create(user_id=request.user.id, date=date, reason=reason)
+
+        return redirect('a_appointment')
 
 
 class AdminFeedbackView(View):
@@ -165,13 +190,38 @@ class AdminFeedbackDetailView(View):
             return redirect('a_feedback')
 
         method = request.POST.get('_method')
+        content = request.POST.get('feedback')
 
         if method == 'PUT':
-            content = request.POST.get('feedback')
-
             feedback.content = content
             feedback.save()
+        elif method == 'DELETE':
+            pass
 
         role = Role.objects.get(user_id=request.user.id)
 
         return render(request, 'a_feedback_detail_view.html', {'role': role.role, 'feedback': feedback})
+
+
+class AdminFeedbackCreateView(View):
+    def get(self, request):
+        unauthenticated_res = Util.redirect_if_unauthenticated(request)
+
+        if unauthenticated_res is not None:
+            return unauthenticated_res
+
+        role = Role.objects.get(user_id=request.user.id)
+
+        return render(request, 'a_feedback_create_view.html', {'role': role.role})
+
+    def post(self, request):
+        unauthenticated_res = Util.redirect_if_unauthenticated(request)
+
+        if unauthenticated_res is not None:
+            return unauthenticated_res
+
+        content = request.POST.get('feedback')
+        Feedback.objects.create(user_id=request.user.id, content=content)
+
+        return redirect('a_feedback')
+

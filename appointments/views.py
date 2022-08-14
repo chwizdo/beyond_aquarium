@@ -1,4 +1,4 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from .models import Appointment, Feedback
 from utils.views import Util
 from django.views import View
@@ -53,6 +53,62 @@ class AdminAppointmentView(View):
         return render(request, 'a_appointment_view.html', {'role': role.role, 'appointments': appointments})
 
 
+class AdminAppointmentDetailView(View):
+    def get(self, request, appointment_id):
+        unauthenticated_res = Util.redirect_if_unauthenticated(request)
+
+        if unauthenticated_res is not None:
+            return unauthenticated_res
+
+        # If user id is not present in the path parameter,
+        # redirect user back to user listing page.
+        if appointment_id is None:
+            return redirect('a_appointment')
+
+        # Query user object from user id in path parameter,
+        # if user object is not found, redirect user back to user listing page.
+        try:
+            appointment = Appointment.objects.get(id=appointment_id)
+        except Appointment.DoesNotExist:
+            return redirect('a_appointment')
+
+        role = Role.objects.get(user_id=request.user.id)
+
+        return render(request, 'a_appointment_detail_view.html', {'role': role.role, 'appointment': appointment})
+
+    def post(self, request, appointment_id):
+        unauthenticated_res = Util.redirect_if_unauthenticated(request)
+
+        if unauthenticated_res is not None:
+            return unauthenticated_res
+
+        # If user id is not present in the path parameter,
+        # redirect user back to user listing page.
+        if appointment_id is None:
+            return redirect('a_appointment')
+
+        # Query user object from user id in path parameter,
+        # if user object is not found, redirect user back to user listing page.
+        try:
+            appointment = Appointment.objects.get(id=appointment_id)
+        except Appointment.DoesNotExist:
+            return redirect('a_appointment')
+
+        method = request.POST.get('_method')
+
+        if method == 'PUT':
+            date = request.POST.get('date')
+            reason = request.POST.get('reason')
+
+            appointment.date = date
+            appointment.reason = reason
+            appointment.save()
+
+        role = Role.objects.get(user_id=request.user.id)
+
+        return render(request, 'a_appointment_detail_view.html', {'role': role.role, 'appointment': appointment})
+
+
 class AdminFeedbackView(View):
     def get(self, request):
         unauthenticated_res = Util.redirect_if_unauthenticated(request)
@@ -65,3 +121,57 @@ class AdminFeedbackView(View):
         role = Role.objects.get(user_id=request.user.id)
 
         return render(request, 'a_feedback_view.html', {'role': role.role, 'feedbacks': feedbacks})
+
+
+class AdminFeedbackDetailView(View):
+    def get(self, request, feedback_id):
+        unauthenticated_res = Util.redirect_if_unauthenticated(request)
+
+        if unauthenticated_res is not None:
+            return unauthenticated_res
+
+        # If user id is not present in the path parameter,
+        # redirect user back to user listing page.
+        if feedback_id is None:
+            return redirect('a_feedback')
+
+        # Query user object from user id in path parameter,
+        # if user object is not found, redirect user back to user listing page.
+        try:
+            feedback = Feedback.objects.get(id=feedback_id)
+        except Feedback.DoesNotExist:
+            return redirect('a_feedback')
+
+        role = Role.objects.get(user_id=request.user.id)
+
+        return render(request, 'a_feedback_detail_view.html', {'role': role.role, 'feedback': feedback})
+
+    def post(self, request, feedback_id):
+        unauthenticated_res = Util.redirect_if_unauthenticated(request)
+
+        if unauthenticated_res is not None:
+            return unauthenticated_res
+
+        # If user id is not present in the path parameter,
+        # redirect user back to user listing page.
+        if feedback_id is None:
+            return redirect('a_feedback')
+
+        # Query user object from user id in path parameter,
+        # if user object is not found, redirect user back to user listing page.
+        try:
+            feedback = Feedback.objects.get(id=feedback_id)
+        except Feedback.DoesNotExist:
+            return redirect('a_feedback')
+
+        method = request.POST.get('_method')
+
+        if method == 'PUT':
+            content = request.POST.get('feedback')
+
+            feedback.content = content
+            feedback.save()
+
+        role = Role.objects.get(user_id=request.user.id)
+
+        return render(request, 'a_feedback_detail_view.html', {'role': role.role, 'feedback': feedback})

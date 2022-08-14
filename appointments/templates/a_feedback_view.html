@@ -28,7 +28,7 @@
                     <td class="align-middle">{{ feedback.user.username }}</td>
                     <td class="align-middle">{{ feedback.content }}</td>
                     <td class="text-end">
-                        <a href="" class="btn btn-primary">Edit</a>
+                        <a href="{% url 'a_feedback_detail' feedback.id %}" class="btn btn-primary">Edit</a>
                     </td>
                 </tr>
                 {% endfor %}

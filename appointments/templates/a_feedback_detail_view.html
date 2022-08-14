@@ -25,8 +25,15 @@
                 </label>
                 <textarea name="feedback" id="feedback" cols="30" class="form-control" rows="10" placeholder="Any valudable feedback is deeply appreciated...">{{ feedback.content }}</textarea>
             </div>
-            <button type="submit" class="btn btn-primary w-100">
+            <button type="submit" class="btn btn-primary mb-3 w-100">
                 Update Feedback
+            </button>
+        </form>
+        <form method="post">
+            {% csrf_token %}
+            <input type="hidden" name="_method" value="DELETE">
+            <button class="btn btn-danger w-100">
+                Delete Feedback
             </button>
         </form>
     </div>

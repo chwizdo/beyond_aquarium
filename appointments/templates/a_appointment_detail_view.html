@@ -42,8 +42,15 @@
                     <option value="consultation" {% if appointment.reason == 'consultation' %} selected {% endif %}>Consultation</option>
                 </select>
             </div>
-            <button type="submit" class="btn btn-primary w-100">
+            <button type="submit" class="btn btn-primary mb-3 w-100">
                 Update Appointment
+            </button>
+        </form>
+        <form method="post">
+            {% csrf_token %}
+            <input type="hidden" name="_method" value="DELETE">
+            <button class="btn btn-danger w-100">
+                Delete Appointment
             </button>
         </form>
     </div>

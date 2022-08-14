@@ -95,15 +95,18 @@ class AdminAppointmentDetailView(View):
             return redirect('a_appointment')
 
         method = request.POST.get('_method')
-        date = request.POST.get('date')
-        reason = request.POST.get('reason')
 
         if method == 'PUT':
+            date = request.POST.get('date')
+            reason = request.POST.get('reason')
+
             appointment.date = date
             appointment.reason = reason
             appointment.save()
         elif method == 'DELETE':
-            pass
+            appointment.delete()
+
+            return redirect('a_appointment')
 
         role = Role.objects.get(user_id=request.user.id)
 
@@ -190,13 +193,16 @@ class AdminFeedbackDetailView(View):
             return redirect('a_feedback')
 
         method = request.POST.get('_method')
-        content = request.POST.get('feedback')
 
         if method == 'PUT':
+            content = request.POST.get('feedback')
+            
             feedback.content = content
             feedback.save()
         elif method == 'DELETE':
-            pass
+            feedback.delete()
+
+            return redirect('a_feedback')
 
         role = Role.objects.get(user_id=request.user.id)
 

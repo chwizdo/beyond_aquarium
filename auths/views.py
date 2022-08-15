@@ -68,7 +68,7 @@ class AdminUserView(View):
     if unauthenticated_res is not None:
       return unauthenticated_res
 
-    users = User.objects.all()
+    users = User.objects.filter(is_active=True)
 
     return render(request, 'a_user_view.html', {'users': users})
 
@@ -121,8 +121,10 @@ class AdminUserDetailView(View):
 
     try:
       role = Role.objects.get(user_id=user.id)
+      role_name = role.role
     except:
       role = None
+      role_name = None
 
     method = request.POST.get('_method')
 
@@ -155,6 +157,10 @@ class AdminUserDetailView(View):
         role_name = None
       else:
         role_name = None
+    elif method == 'DELETE':
+      user.is_active = False
+      user.save()
+      return redirect('a_user')
 
     return render(request, 'a_user_detail_view.html', {'selected_user': user, 'role': role_name})
 

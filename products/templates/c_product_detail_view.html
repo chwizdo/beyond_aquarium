@@ -15,7 +15,11 @@
         <div class="row">
             <div class="col-4">
                 <div class="ratio ratio-1x1 mb-2">
-                    <img style="object-fit: cover;" class="rounded" src="https://images.unsplash.com/photo-1659948782675-9d4fadea983b?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=2070&q=80">
+                    {% if product.image.name is None or product.image == '' %}
+                        <img style="object-fit: cover;" class="rounded" src="https://images.unsplash.com/photo-1659948782675-9d4fadea983b?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=2070&q=80">
+                    {% else %}
+                        <img style="object-fit: cover;" class="rounded" src="{{ product.image.url }}">
+                    {% endif %}
                 </div>
             </div>
             <div class="col-8">

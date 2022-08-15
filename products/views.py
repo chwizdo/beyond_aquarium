@@ -192,16 +192,25 @@ class APIProductDetailView(View):
             description = request.POST.get('description')
             price = request.POST.get('price')
             stock = request.POST.get('stock')
+            image = request.FILES.get('image')
+
+            print(image)
 
             product.name = name
             product.description = description
             product.price = price
             product.stock = stock
+            product.image = image
             product.save()
+        if method == 'DELETE':
+            product.delete()
+            return redirect('a_product')
 
         role = Role.objects.get(user_id=request.user.id)
+
+        product_categories = ProductCategory.objects.all()
         
-        return render(request, 'a_product_detail_view.html', {'product': product, 'role': role.role})
+        return render(request, 'a_product_detail_view.html', {'product': product, 'product_categories': product_categories, 'role': role.role})
 
 
 class APIProductCreateView(View):
@@ -215,7 +224,7 @@ class APIProductCreateView(View):
 
         role = Role.objects.get(user_id=request.user.id)
 
-        return render(request, 'a_product_detail_view.html', {'product_categories': product_categories, 'role': role.role})
+        return render(request, 'a_product_create_view.html', {'product_categories': product_categories, 'role': role.role})
 
     def post(self, request):
         unauthenticated_res = Util.redirect_if_unauthenticated(request)
@@ -228,7 +237,8 @@ class APIProductCreateView(View):
         price = request.POST.get('price')
         stock = request.POST.get('stock')
         category = request.POST.get('category')
+        image = request.FILES.get('image')
 
-        Product.objects.create(name=name, description=description, price=price, stock=stock, category_id=category)
+        Product.objects.create(name=name, description=description, price=price, stock=stock, category_id=category, image=image)
 
         return redirect('a_product')

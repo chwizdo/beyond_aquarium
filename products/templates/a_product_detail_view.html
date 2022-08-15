@@ -15,8 +15,8 @@
         {% include 's_nav_bar.html' %}
     {% endif %}
     
-    <div class="container">
-        <form method="post">
+    <div class="container mb-4">
+        <form method="post" enctype="multipart/form-data">
             {% csrf_token %}
             <input type="hidden" name="_method" value="PUT">
             <div class="mb-1">
@@ -43,7 +43,7 @@
                 </label>
                 <input type="number" class="form-control" name="stock" id="stock" value="{{ product.stock }}">
             </div>
-            <div class="mb-5">
+            <div class="mb-1">
                 <label for="category" class="form-label">
                     Category
                 </label>
@@ -53,8 +53,27 @@
                     {% endfor %}
                 </select>
             </div>
+            <div class="mb-1">
+                <label for="old-image" class="form-label">
+                    Current Image
+                </label>
+                <input type="text" class="form-control" name="old-image" id="old-image" value="{% if product.image.name is not None and product.image != ''  %}{{ product.image.url }}{% else %}No Image Selected{% endif %}" disabled>
+            </div>
+            <div class="mb-5">
+                <label for="image" class="form-label">
+                    New Image
+                </label>
+                <input type="file" class="form-control" name="image" id="image" accept="image/*" required>
+            </div>
             <button type="submit" class="btn btn-primary w-100 mb-3">
                 Update
+            </button>
+        </form>
+        <form method="post">
+            {% csrf_token %}
+            <input type="hidden" name="_method" value="DELETE">
+            <button class="btn btn-danger w-100">
+                Delete Product
             </button>
         </form>
     </div>

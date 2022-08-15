@@ -10,7 +10,7 @@
 </head>
 <body>
     {% if role == 'admin' %}
-        {% include 'a_nav_bar.html' %}
+        {% include 'a_nav_bar.html' with active='Orders' %}
     {% else %}
         {% include 's_nav_bar.html' %}
     {% endif %}

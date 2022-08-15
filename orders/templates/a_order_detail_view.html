@@ -12,7 +12,7 @@
     {% if role == 'admin' %}
         {% include 'a_nav_bar.html' with active='Orders' %}
     {% else %}
-        {% include 's_nav_bar.html' %}
+        {% include 's_nav_bar.html' with active='Orders' %}
     {% endif %}
 
     <div class="container mb-4">

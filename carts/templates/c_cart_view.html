@@ -19,7 +19,11 @@
                         <a href="{% url 'c_product_detail' cart_item.product.id %}" class="text-decoration-none text-black">
                             <div class="col">
                                 <div class="ratio ratio-1x1 mb-2">
-                                    <img style="object-fit: cover;" class="rounded" src="https://images.unsplash.com/photo-1659948782675-9d4fadea983b?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=2070&q=80">
+                                    {% if cart_item.product.image.name is None or cart_item.product.image == '' %}
+                                        <img style="object-fit: cover;" class="rounded" src="https://images.unsplash.com/photo-1659948782675-9d4fadea983b?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=2070&q=80">
+                                    {% else %}
+                                        <img style="object-fit: cover;" class="rounded" src="{{ cart_item.product.image.url }}">
+                                    {% endif %}
                                 </div>
                                 <div class="mb-1">
                                     {{ cart_item.product.name }}

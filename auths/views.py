@@ -30,7 +30,10 @@ class CustomerLoginView(View):
 
     authenticated_res = Util.redirect_if_authenticated(request)
 
-    return authenticated_res
+    if authenticated_res is not None:
+      return authenticated_res
+    else:
+      return render(request, 'c_login_view.html')
 
 class CustomerSignUpView(View):
   def get(self, request):
@@ -56,7 +59,9 @@ class CustomerSignUpView(View):
       # show error message
       return render(request, 'c_signup_view.html')
 
-    User.objects.create_user(email, password=password, first_name=name, is_staff=True)
+    user = User.objects.create_user(email, password=password, first_name=name, is_staff=True)
+
+    login(request, user)
 
     return redirect('c_product')
 

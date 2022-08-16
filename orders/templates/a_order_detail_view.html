@@ -22,7 +22,11 @@
                     {% for order_item in order_items %}
                         <div class="col">
                             <div class="ratio ratio-1x1 mb-2">
-                                <img style="object-fit: cover;" class="rounded" src="https://images.unsplash.com/photo-1659948782675-9d4fadea983b?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=2070&q=80">
+                                {% if order_item.image.name is None or order_item.image == '' %}
+                                    <img style="object-fit: cover;" class="rounded" src="https://images.unsplash.com/photo-1659948782675-9d4fadea983b?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=2070&q=80">
+                                {% else %}
+                                    <img style="object-fit: cover;" class="rounded" src="{{ order_item.image.url }}">
+                                {% endif %}
                             </div>
                             <div class="mb-1">
                                 {{ order_item.name }}

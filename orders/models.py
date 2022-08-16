@@ -34,6 +34,7 @@ class OrderItem(models.Model):
     quantity = models.IntegerField()
     category = models.CharField(max_length=256)
     order = models.ForeignKey(Order, on_delete=models.CASCADE)
+    image = models.ImageField(upload_to='images', null=True)
 
     def __str__(self):
         return self.name

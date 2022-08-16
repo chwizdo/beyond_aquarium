@@ -1,3 +1,4 @@
+from email.mime import image
 from django.views import View
 from django.shortcuts import render, redirect
 from auths.models import Role
@@ -78,6 +79,7 @@ class CustomerOrderView(View):
                 quantity=cart_item.quantity, 
                 category=product.category.name, 
                 order_id=order.id,
+                image=product.image,
             )
 
             cart_item.delete()

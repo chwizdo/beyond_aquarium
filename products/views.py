@@ -193,14 +193,14 @@ class APIProductDetailView(View):
             price = request.POST.get('price')
             stock = request.POST.get('stock')
             image = request.FILES.get('image')
-
-            print(image)
+            category = request.POST.get('category')
 
             product.name = name
             product.description = description
             product.price = price
             product.stock = stock
             product.image = image
+            product.category_id = category
             product.save()
         if method == 'DELETE':
             product.delete()

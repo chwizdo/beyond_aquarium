@@ -27,7 +27,7 @@ then
 docker-compose up
 ```
 
-4. Check if the server is running by going to ```localhost:8000/admin``` in your preferred browser. if the page is not accessible (means server not running), hit ```Ctrl+C``` on your keyboard to stop any running servers, and run ```docker-compose up``` again. Try it a few times until the server starts running.
+4. Check if the server is running by going to ```localhost:8000/admin``` in your preferred browser. if the page is not accessible (means server not running), hit ```Ctrl+C``` on your keyboard to stop any running servers, and run ```docker-compose up``` again. Try it a few times until the server starts running. If the page displays Django error message, means the server is booted up.
 
 5. After the server is booted up, open another terminal console (keep the previous one active) and run this command to get into the Docker environment.
 

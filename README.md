@@ -12,7 +12,7 @@ FYP project for client_20220723
 2. Go to the root of the project.
 
 ```
-cd [path_to_project]
+cd [path_to_project_folder]
 ```
 
 3. Run the following commands to start the server up.
